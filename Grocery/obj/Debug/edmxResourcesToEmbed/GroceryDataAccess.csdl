@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="GroceryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="ORDER">
+    <Key>
+      <PropertyRef Name="ORD_NUM" />
+    </Key>
+    <Property Name="ORD_NUM" Type="Int32" Nullable="false" />
+    <Property Name="ORD_AMOUNT" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+    <Property Name="ORD_DATE" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Employee_id" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Employee" Relationship="GroceryModel.FK_Employee_Orders" FromRole="ORDER" ToRole="Employee" />
+  </EntityType>
+  <EntityContainer Name="GroceryEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="ORDERS" EntityType="Self.ORDER" />
+    <EntitySet Name="Categories" EntityType="GroceryModel.Category" />
+    <EntitySet Name="Inventories" EntityType="GroceryModel.Inventory" />
+    <AssociationSet Name="FK__Inventory__Categ__2E1BDC42" Association="GroceryModel.FK__Inventory__Categ__2E1BDC42">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="Inventory" EntitySet="Inventories" />
+    </AssociationSet>
+    <EntitySet Name="Employees" EntityType="GroceryModel.Employee" />
+    <AssociationSet Name="FK_Employee_Orders" Association="GroceryModel.FK_Employee_Orders">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="ORDER" EntitySet="ORDERS" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Category_id" />
+    </Key>
+    <Property Name="Category_id" Type="Int32" Nullable="false" />
+    <Property Name="CategoryDescription" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Inventories" Relationship="GroceryModel.FK__Inventory__Categ__2E1BDC42" FromRole="Category" ToRole="Inventory" />
+  </EntityType>
+  <EntityType Name="Inventory">
+    <Key>
+      <PropertyRef Name="item_id" />
+    </Key>
+    <Property Name="item_id" Type="Int32" Nullable="false" />
+    <Property Name="item_description" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+    <Property Name="cost" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="Category_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Category1" Relationship="GroceryModel.FK__Inventory__Categ__2E1BDC42" FromRole="Inventory" ToRole="Category" />
+    <Property Name="Discounts" Type="Decimal" Precision="4" Scale="2" />
+  </EntityType>
+  <Association Name="FK__Inventory__Categ__2E1BDC42">
+    <End Type="GroceryModel.Category" Role="Category" Multiplicity="1" />
+    <End Type="GroceryModel.Inventory" Role="Inventory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Category_id" />
+      </Principal>
+      <Dependent Role="Inventory">
+        <PropertyRef Name="Category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Employee_id" />
+    </Key>
+    <Property Name="Employee_id" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
+    <Property Name="Employee_Name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="Working_Area" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+    <Property Name="Phone_No" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+    <Property Name="Country" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ORDERS" Relationship="GroceryModel.FK_Employee_Orders" FromRole="Employee" ToRole="ORDER" />
+  </EntityType>
+  <Association Name="FK_Employee_Orders">
+    <End Type="GroceryModel.Employee" Role="Employee" Multiplicity="1" />
+    <End Type="GroceryModel.ORDER" Role="ORDER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Employee_id" />
+      </Principal>
+      <Dependent Role="ORDER">
+        <PropertyRef Name="Employee_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

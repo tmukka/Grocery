@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="GroceryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="Category_id" />
+    </Key>
+    <Property Name="Category_id" Type="int" Nullable="false" />
+    <Property Name="CategoryDescription" Type="varchar" MaxLength="32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Employee_id" />
+    </Key>
+    <Property Name="Employee_id" Type="varchar" MaxLength="16" Nullable="false" />
+    <Property Name="Employee_Name" Type="varchar" MaxLength="64" />
+    <Property Name="Password" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="Working_Area" Type="varchar" MaxLength="32" />
+    <Property Name="Phone_No" Type="varchar" MaxLength="16" />
+    <Property Name="Country" Type="varchar" MaxLength="32" />
+  </EntityType>
+  <EntityType Name="Inventory">
+    <Key>
+      <PropertyRef Name="item_id" />
+    </Key>
+    <Property Name="item_id" Type="int" Nullable="false" />
+    <Property Name="item_description" Type="varchar" MaxLength="32" Nullable="false" />
+    <Property Name="cost" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="Category_id" Type="int" Nullable="false" />
+    <Property Name="Discounts" Type="decimal" Precision="4" Scale="2" />
+  </EntityType>
+  <EntityType Name="ORDERS">
+    <Key>
+      <PropertyRef Name="ORD_NUM" />
+    </Key>
+    <Property Name="ORD_NUM" Type="int" Nullable="false" />
+    <Property Name="ORD_AMOUNT" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+    <Property Name="ORD_DATE" Type="datetime" Nullable="false" />
+    <Property Name="Employee_id" Type="varchar" MaxLength="16" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__Inventory__Categ__30F848ED">
+    <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+    <End Role="Inventory" Type="Self.Inventory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="Category_id" />
+      </Principal>
+      <Dependent Role="Inventory">
+        <PropertyRef Name="Category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Employee_Orders">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="ORDERS" Type="Self.ORDERS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Employee_id" />
+      </Principal>
+      <Dependent Role="ORDERS">
+        <PropertyRef Name="Employee_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="GroceryModelStoreContainer">
+    <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Inventory" EntityType="Self.Inventory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ORDERS" EntityType="Self.ORDERS" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__Inventory__Categ__30F848ED" Association="Self.FK__Inventory__Categ__30F848ED">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Inventory" EntitySet="Inventory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Employee_Orders" Association="Self.FK_Employee_Orders">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="ORDERS" EntitySet="ORDERS" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
